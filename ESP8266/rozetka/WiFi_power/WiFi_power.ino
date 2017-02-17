@@ -14,8 +14,8 @@ bool    PowerOn  = false;
 // Имя хоста
 const char* host = "esp8266-power";
 // Вместо звездочек свои параметры WiFi сети
-const char* ssid = "*****";
-const char* password = "******";
+const char* ssid = "TP-LINK";
+const char* password = "76533457";
 
 ESP8266WebServer server(80);
 
@@ -39,6 +39,10 @@ void setup() {
      server.onNotFound ( HTTP_handleRoot );
      server.begin();    
      Serial.printf( "HTTP server ok! Open http://%s.local in your browser\n", host);
+     Serial.print("Connected to ");
+     Serial.println(ssid);
+     Serial.print("IP address: ");
+     Serial.println(WiFi.localIP());
   }
   else {
      Serial.printf("WiFi started is fail");

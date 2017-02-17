@@ -3,6 +3,8 @@
 #define BLUE 13// GPIO13/TXD01
 
 void setup() {
+  Serial.begin(115200);
+  Serial.printf("\n\nFree memory %d\n",ESP.getFreeHeap());
   pinMode(RED, OUTPUT);
   pinMode(GREEN, OUTPUT);
   pinMode(BLUE, OUTPUT);
