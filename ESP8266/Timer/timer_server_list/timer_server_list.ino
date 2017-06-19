@@ -32,9 +32,9 @@ IPAddress subnet(255,255,240,0);
 
 
 IPAddress timeServerIP; // time.nist.gov NTP server address
-//const char* ntpServerName = "time.nist.gov";
+const char* ntpServerName = "time.nist.gov";
 
-char* ntpServerName[3] = {"time.nist.gov", "ntp.time.in.ua" , "0.ua.pool.ntp.org"};
+//String ntpServerNameAr[3] = {"time.nist.gov", "ntp.time.in.ua" , "0.ua.pool.ntp.org"};
 
 
 const int NTP_PACKET_SIZE = 48; // NTP time stamp is in the first 48 bytes of the message
@@ -87,35 +87,18 @@ void setup() {
 }
 void oldloop()
 {
-
-//  do {
-//      delay(50);          // подождать, пока датчики стабилизируются
-//      x = readSensors(); // проверить датчики
-//  } while (x < 100);
-  int cb;
   //get a random server from the pool
-  for (int i=0; i <= 2; i++){
-      Serial.print("Get time Server IP: ");
-      WiFi.hostByName(ntpServerName[i], timeServerIP); 
-      Serial.print(ntpServerName[i]);
-      Serial.print(" => ");
-      Serial.println(timeServerIP);    
-      sendNTPpacket(timeServerIP); // send an NTP packet to a time server
-      // wait to see if a reply is available
-      delay(1000);
+  Serial.print("Get time Server IP: ");
+  WiFi.hostByName(ntpServerName, timeServerIP); 
+  Serial.println(timeServerIP);
+
+  sendNTPpacket(timeServerIP); // send an NTP packet to a time server
+  // wait to see if a reply is available
+  delay(1000);
   
-      cb = udp.parsePacket();
-      if (!cb) {
-        Serial.println("no packet yet");
-      }
-      else {
-        break;
-     }
-  }
-  //int cb = udp.parsePacket();
+  int cb = udp.parsePacket();
   if (!cb) {
-    Serial.println("Sync time failed");
-    return;
+    Serial.println("no packet yet");
   }
   else {
     Serial.print("packet received, length=");
@@ -152,7 +135,6 @@ void oldloop()
    
 
     // print the hour, minute and second:
-    Serial.println('');
     Serial.print("The UTC time is ");       // UTC is the time at Greenwich Meridian (GMT)
     Serial.print((epoch  % 86400L) / 3600); // print the hour (86400 equals secs per day)
     Serial.print(':');
@@ -167,7 +149,6 @@ void oldloop()
       Serial.print('0');
     }
     Serial.println(epoch % 60); // print the second
-    Serial.println('');
   }
   // wait ten seconds before asking for the time again
 
